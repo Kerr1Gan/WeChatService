@@ -1,4 +1,4 @@
-package com.starwin.wechatservice.core;
+package com.starwin.wechatservice.core.config;
 
 import java.util.Arrays;
 import java.util.List;

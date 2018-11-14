@@ -6,6 +6,7 @@ import com.blade.kit.http.HttpRequest;
 import com.blade.kit.json.JSONArray;
 import com.blade.kit.json.JSONKit;
 import com.blade.kit.json.JSONObject;
+import com.starwin.wechatservice.core.config.Constant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -183,7 +184,7 @@ public class WeChatApiUtil {
             }
 
             String retcode = Matchers.match("retcode:\"(\\d+)\",", res);
-            String selector = Matchers.match("selector:\"(\\d+)\"}", res);
+            String selector = Matchers.match("selector:\"(\\d+)\"", res);
             if (null != retcode && null != selector) {
                 arr[0] = Integer.parseInt(retcode);
                 arr[1] = Integer.parseInt(selector);

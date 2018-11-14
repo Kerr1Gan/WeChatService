@@ -6,9 +6,13 @@ import android.content.Intent;
 import com.blade.kit.json.JSONArray;
 import com.blade.kit.json.JSONObject;
 
+import java.net.HttpURLConnection;
+
 public class WeChatInstance {
 
     private WeChatMeta weChatMeta;
+
+    private JSONObject mWxInitJsonObj;
 
     public void doLogin(Context context) throws InterruptedException {
         String uuid = WeChatApiUtil.getUUID();
@@ -18,19 +22,27 @@ public class WeChatInstance {
         while (!Thread.currentThread().isInterrupted()) {
             String res = WeChatApiUtil.waitLogin(0, uuid);
             String code = Matchers.match("window.code=(\\d+);", res);
-            if (!Constant.HTTP_OK.equals(code)) {
+            if (!String.valueOf(HttpURLConnection.HTTP_OK).equals(code)) {
                 Thread.sleep(2000);
                 continue;
             }
             WeChatMeta meta = WeChatApiUtil.newWechatMeta(res);
             WeChatApiUtil.login(meta);
-            JSONObject wxInitObj = WeChatApiUtil.wxInit(meta);
+            mWxInitJsonObj = WeChatApiUtil.wxInit(meta);
             WeChatApiUtil.openStatusNotify(meta);
             this.weChatMeta = meta;
-            JSONArray contactList = wxInitObj.get("ContactList").asArray();
+            JSONArray contactList = mWxInitJsonObj.get("ContactList").asArray();
             //todo
             //WxLocalCache.init(this.meta).setLatestContactList(contactList);
             break;
         }
+    }
+
+    public JSONArray getContactList() {
+        return mWxInitJsonObj.get("ContactList").asArray();
+    }
+
+    public WeChatMeta getWeChatMeta() {
+        return weChatMeta;
     }
 }
