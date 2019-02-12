@@ -8,6 +8,8 @@ import com.blade.kit.json.JSONObject;
 
 import java.net.HttpURLConnection;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class WeChatInstance {
 
     private WeChatMeta weChatMeta;
@@ -18,6 +20,7 @@ public class WeChatInstance {
         String uuid = WeChatApiUtil.getUUID();
         final String path = WeChatApiUtil.getQrCodeUrl(uuid);
         Intent intent = WeChatLoginActivity.newIntent(context, uuid, path);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         while (!Thread.currentThread().isInterrupted()) {
             String res = WeChatApiUtil.waitLogin(0, uuid);
